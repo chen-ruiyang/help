@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小工具箱</title>
+    <style>
+        /* 💎 核心配色：极简黑白灰 */
+        :root {
+            --bg-color: #fafafa;         
+            --text-main: #171717;        
+            --text-muted: #737373;       
+            --card-bg: #ffffff;          
+            --border-color: #e5e5e5;     
+            --primary-bg: #171717;       
+            --primary-text: #ffffff;     
+            --primary-hover: #383838;    
+            --badge-bg: #f4f4f5;         
+            --badge-text: #525252;       
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);       
+            --card-shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* 🌙 暗黑模式：深邃的高级黑 */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #0a0a0a;         
+                --text-main: #ededed;        
+                --text-muted: #a1a1aa;       
+                --card-bg: #121212;          
+                --border-color: #262626;     
+                --primary-bg: #ededed;       
+                --primary-text: #0a0a0a;     
+                --primary-hover: #d4d4d4;    
+                --badge-bg: #27272a;
+                --badge-text: #e4e4e7;
+                --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+                --card-shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.6);
+            }
+        }
+
+        /* 全局基础排版 */
+        body { 
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; 
+            background: var(--bg-color); 
+            color: var(--text-main); 
+            line-height: 1.7; 
+            margin: 0; 
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background-color 0.4s ease, color 0.4s ease;
+            -webkit-font-smoothing: antialiased; 
+        }
+
+        .container { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 50px 20px; 
+            flex: 1;
+        }
+
+        /* 头部介绍区 */
+        .hero { text-align: center; margin-bottom: 50px; }
+        .hero h1 { 
+            font-size: 2.6rem; 
+            margin-bottom: 12px; 
+            font-weight: 800; 
+            letter-spacing: -0.03em; 
+        }
+        .hero p { 
+            color: var(--text-muted); 
+            font-size: 1.1rem; 
+            max-width: 600px; 
+            margin: 0 auto; 
+        }
+
+        /* 卡片网格布局 */
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 24px; 
+        }
+
+        /* 卡片设计 */
+        .card { 
+            background: var(--card-bg); 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: var(--card-shadow); 
+            border: 1px solid var(--border-color);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover { 
+            transform: translateY(-4px); 
+            box-shadow: var(--card-shadow-hover); 
+            border-color: var(--text-muted); 
+        }
+
+        /* 卡片内部元素 */
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .card h3 { 
+            margin: 0; 
+            font-size: 1.25rem; 
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            color: var(--text-main); 
+        }
+        .badge { 
+            background: var(--badge-bg); 
+            color: var(--badge-text); 
+            padding: 4px 8px; 
+            border-radius: 6px; 
+            font-size: 0.75rem; 
+            font-weight: 600; 
+            letter-spacing: 0.5px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; 
+        }
+        
+        .card p { 
+            color: var(--text-muted); 
+            font-size: 0.95rem; 
+            margin-bottom: 30px; 
+            flex-grow: 1; 
+        }
+
+        /* 下载按钮 */
+        .btn { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            background: var(--primary-bg); 
+            color: var(--primary-text); 
+            padding: 12px 20px; 
+            text-decoration: none; 
+            border-radius: 8px; 
+            font-size: 0.95rem;
+            font-weight: 600; 
+            transition: all 0.2s ease; 
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .btn:hover { 
+            background: var(--primary-hover); 
+        }
+        .btn:active { 
+            transform: scale(0.97); 
+        }
+        .btn svg { width: 18px; height: 18px; margin-right: 8px; fill: currentColor; }
+
+        /* 页脚 */
+        footer { 
+            text-align: center; 
+            padding: 30px 20px; 
+            color: var(--text-muted); 
+            font-size: 0.9rem; 
+            border-top: 1px solid var(--border-color);
+        }
+        footer a { color: var(--text-main); text-decoration: none; font-weight: 500; }
+        footer a:hover { text-decoration: underline; }
+
+        /* --- 新增：复制相关样式 --- */
+        .contact-clickable {
+            cursor: pointer;
+            transition: color 0.2s;
+            display: inline-block;
+            margin-top: 4px;
+        }
+        .contact-clickable:hover {
+            color: var(--text-main);
+            text-decoration: underline;
+        }
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-bg);
+            color: var(--primary-text);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="hero">
+            <h1>🛠️ 小工具箱</h1>
+            <p>这里收集了我个人常用的小工具，完全免费，点击下方按钮即可获取最新版本（本人独立开发）</p>
+        </div>
+        
+        <div class="grid">
+            <div class="card">
+                <div class="card-header">
+                    <h3>📄 文档转换器</h3>
+                    <span class="badge">v1.0</span>
+                </div>
+                <p>轻量级转换工具，支持快速将 PDF / Word (Docx) / jpg 格式文档无损转换，完全离线运行，保护您的隐私安全</p>
+                <a href="https://github.com/你的用户名/仓库名/releases/latest/download/文件转换器.exe" class="btn">
+                    <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                    下载
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部版权信息 -->
+    <footer>
+        <p>&copy; 2026 ChenRuiyang. All rights reserved. | 2026 陈睿阳 版权所有 <a href="https://github.com/Chen-ruiyang" target="_blank">访问我的 GitHub</a></p>
+        <div class="contact-clickable" onclick="copyText('chenruiyang8686@gmail.com')">邮箱：15902174179@163.com</div><br>
+        <div class="contact-clickable" onclick="copyText('chenruiyang8686@gmail.com')">邮箱：chenruiyang8686@gmail.com</div><br>
+        <div class="contact-clickable" onclick="copyText('cn183915')">微信：cn183915</div>
+    </footer>
+    
+    <!-- 复制成功的提示弹窗 -->
+    <div id="toast">已成功复制</div>
+
+    <script>
+        function copyText(text) {
+            // 使用现代 API 复制文本
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById('toast');
+                toast.style.opacity = '1';
+                // 1.5秒后自动隐藏提示
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                }, 1500);
+            }).catch(err => {
+                console.error('无法复制: ', err);
+            });
+        }
+    </script>
+
+</body>
+</html>
